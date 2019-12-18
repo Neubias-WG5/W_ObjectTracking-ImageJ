@@ -1,0 +1,117 @@
+{
+  "command-line": "python wrapper.py CYTOMINE_HOST CYTOMINE_PUBLIC_KEY CYTOMINE_PRIVATE_KEY CYTOMINE_ID_PROJECT CYTOMINE_ID_SOFTWARE MEDRAD THRESHOLD ERODRAD DMAPDS NOISETOL ",
+  "inputs": [
+    {
+      "name": "Cytomine host",
+      "description": "Cytomine server hostname",
+      "set-by-server": true,
+      "value-key": "@ID",
+      "optional": false,
+      "id": "cytomine_host",
+      "type": "String",
+      "command-line-flag": "--@id"
+    },
+    {
+      "name": "Cytomine public key",
+      "description": "Cytomine public key",
+      "set-by-server": true,
+      "value-key": "@ID",
+      "optional": false,
+      "id": "cytomine_public_key",
+      "type": "String",
+      "command-line-flag": "--@id"
+    },
+    {
+      "name": "Cytomine private key",
+      "description": "Cytomine private key",
+      "set-by-server": true,
+      "value-key": "@ID",
+      "optional": false,
+      "id": "cytomine_private_key",
+      "type": "String",
+      "command-line-flag": "--@id"
+    },
+    {
+      "name": "Cytomine project id",
+      "description": "Cytomine project id",
+      "set-by-server": true,
+      "value-key": "@ID",
+      "optional": false,
+      "id": "cytomine_id_project",
+      "type": "Number",
+      "command-line-flag": "--@id"
+    },
+    {
+      "name": "Cytomine software id",
+      "description": "Cytomine software id",
+      "set-by-server": true,
+      "value-key": "@ID",
+      "optional": false,
+      "id": "cytomine_id_software",
+      "type": "Number",
+      "command-line-flag": "--@id"
+    },
+    {
+      "default-value": 5,
+      "name": "Median filter radius",
+      "description": "Median filter radius in pixels",
+      "set-by-server": false,
+      "value-key": "@ID",
+      "optional": true,
+      "id": "medrad",
+      "type": "Number",
+      "command-line-flag": "--@id"
+    },
+    {
+      "default-value": 105,
+      "name": "Threshold",
+      "description": "Global threshold (grayscale level)",
+      "set-by-server": false,
+      "value-key": "@ID",
+      "optional": true,
+      "id": "threshold",
+      "type": "Number",
+      "command-line-flag": "--@id"
+    },
+    {
+      "default-value": 5,
+      "name": "Erosion radius",
+      "description": "Erosion radius to seed objects (in pixels)",
+      "set-by-server": false,
+      "value-key": "@ID",
+      "optional": true,
+      "id": "erodrad",
+      "type": "Number",
+      "command-line-flag": "--@id"
+    },
+    {
+      "default-value": 2,
+      "name": "DmapDS",
+      "description": "Used for speed up (set from 1-3, recommended 2)",
+      "set-by-server": false,
+      "value-key": "@ID",
+      "optional": true,
+      "id": "dmapds",
+      "type": "Number",
+      "command-line-flag": "--@id"
+    },
+    {
+      "default-value": 3,
+      "name": "Noise tolerance",
+      "description": "Noise tolerance to split out touching objects (distance map gray levels)",
+      "set-by-server": false,
+      "value-key": "@ID",
+      "optional": true,
+      "id": "noisetol",
+      "type": "Number",
+      "command-line-flag": "--@id"
+    }
+  ],
+  "name": "ObjectTracking-ImageJ",
+  "description": "An object tracking workflow based on ImageJ",
+  "schema-version": "cytomine-0.1",
+  "container-image": {
+    "image": "neubiaswg5/w_objecttracking-imagej",
+    "type": "singularity"
+  }
+}
