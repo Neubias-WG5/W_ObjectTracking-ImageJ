@@ -21,7 +21,7 @@ def main(argv):
         # 3. Call the image analysis workflow using the run script
         nj.job.update(progress=25, statusComment="Launching workflow...")
         command = "/usr/bin/xvfb-run java -Xmx6000m -cp /fiji/jars/ij.jar ij.ImageJ --headless --console " \
-                  "-macro macro.ijm \"input={}, output={}, MedRad={}, Thr={}, ErodRad={}, DmapDS={}, NoiseTol={}\""\
+                  "-macro macro.ijm \"input={}, output={}, medrad={}, thr={}, erodrad={}, dmapds={}, noisetol={}\""\
                     .format(in_path, out_path, nj.parameters.medrad, nj.parameters.threshold,
                             nj.parameters.erodrad, nj.parameters.dmapds, nj.parameters.noisetol)
 
