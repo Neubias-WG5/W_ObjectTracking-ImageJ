@@ -8,11 +8,11 @@ inputDir = "C:\\Users\\stosi\\Desktop\\in";
 outputDir = "C:\\Users\\stosi\\Desktop\\out";
 
 // Parameters for CTC time-lapse
-MedRad = 5;		  // Median filter radius (pix)
-Thr = 105;		  // Global threshold (fixed)
-ErodRad = 5;		  // Erosion radius to seed objects (pix)
-DmapDS = 2;    		  // Used to speed up (set from 1-3, recommended 2)
-NoiseTol = 3;		  // Noise tolerance to split out touching objects (distance map gray levels)
+medrad = 5;		  // Median filter radius (pix)
+thr= 105;		  // Global threshold (fixed)
+erodrad = 5;		  // Erosion radius to seed objects (pix)
+dmapds = 2;    		  // Used to speed up (set from 1-3, recommended 2)
+noisetol = 3;		  // Noise tolerance to split out touching objects (distance map gray levels)
 
 // Read arguments from command line
 arg = getArgument();
@@ -22,11 +22,11 @@ for(i=0; i<parts.length; i++)
 	nameAndValue = split(parts[i], "=");
 	if (indexOf(nameAndValue[0], "input")>-1) inputDir=nameAndValue[1];
 	if (indexOf(nameAndValue[0], "output")>-1) outputDir=nameAndValue[1];
-	if (indexOf(nameAndValue[0], "MedRad")>-1) MedRad=nameAndValue[1];
-	if (indexOf(nameAndValue[0], "Thr")>-1) Thr=nameAndValue[1];
-	if (indexOf(nameAndValue[0], "ErodRad")>-1) ErodRad=nameAndValue[1];
-	if (indexOf(nameAndValue[0], "DmapDS")>-1) DmapDS=nameAndValue[1];
-	if (indexOf(nameAndValue[0], "NoiseTol")>-1) NoiseTol=nameAndValue[1];
+	if (indexOf(nameAndValue[0], "medrad")>-1) medrad=nameAndValue[1];
+	if (indexOf(nameAndValue[0], "thr")>-1) thr=nameAndValue[1];
+	if (indexOf(nameAndValue[0], "erodrad")>-1) erodrad=nameAndValue[1];
+	if (indexOf(nameAndValue[0], "dmapds")>-1) dmapds=nameAndValue[1];
+	if (indexOf(nameAndValue[0], "noisetol")>-1) noisetol=nameAndValue[1];
 }
 
 images = getFileList(inputDir);
@@ -54,17 +54,17 @@ run("Set Measurements...", "area mean centroid stack redirect=None decimal=3");
 run("Select None");
 
 // Pre-processing
-if(MedRad>0)run("Median...", "radius="+d2s(MedRad,0)+" stack");
-setThreshold(Thr, 65535);
+if(medrad>0)run("Median...", "radius="+d2s(medrad,0)+" stack");
+setThreshold(thr, 65535);
 setOption("BlackBackground", false);
 run("Convert to Mask", "method=Default background=Dark");
 run("Fill Holes", "stack");
-if(NoiseTol>-1)
+if(noisetol>-1)
 {
-	if(NoiseTol==0)run("Watershed", "stack");
-	else modWaterhsed(NoiseTol,DmapDS);
+	if(noisetol==0)run("Watershed", "stack");
+	else modWaterhsed(noisetol,dmapds);
 }
-if(ErodRad>0)run("Minimum...", "radius="+d2s(ErodRad,0)+" stack");
+if(erodrad>0)run("Minimum...", "radius="+d2s(erodrad,0)+" stack");
 rename("SeedMask.tif");
 
 // Object analysis (Step 1: find connection tubes)
@@ -194,7 +194,7 @@ for(j=1;j<=NObjs2;j++)if(Marked[j]==0)Str = Str + d2s(j,0)+" "+d2s(StartFrame[j]
 
 // Dilate to restore original objects shape
 run("Select None");
-if(ErodRad>0)run("Maximum...", "radius="+d2s(ErodRad,0)+" stack");
+if(erodrad>0)run("Maximum...", "radius="+d2s(erodrad,0)+" stack");
 
 // Apply LUT
 run("Rainbow RGB");
@@ -216,18 +216,18 @@ setBatchMode("exit & display");
 
 
 // Modified watershed (find significant regional maxima)
-function modWaterhsed(NoiseTol,DmapDS)
+function modWaterhsed(noisetol,dmapds)
 {
 	rename("Mask.tif");
 	W = getWidth;H = getHeight();D = nSlices;
-	run("Scale...", "x="+d2s(1/DmapDS,2)+" y="+d2s(1/DmapDS,2)+" z=1.0 interpolation=None process create title=Dmap");
+	run("Scale...", "x="+d2s(1/dmapds,2)+" y="+d2s(1/dmapds,2)+" z=1.0 interpolation=None process create title=Dmap");
 	run("Distance Map", "stack");
 	N = nSlices;
 	for(i=0;i<N;i++)
 	{
 		selectImage("Dmap");
 		setSlice(i+1);
-		run("Find Maxima...", "noise="+d2s(round(NoiseTol/DmapDS),1)+" output=[Segmented Particles] light");
+		run("Find Maxima...", "noise="+d2s(round(noisetol/dmapds),1)+" output=[Segmented Particles] light");
 		if(i==0)rename("WatershedLinesDS");
 		else 
 		{
@@ -236,7 +236,7 @@ function modWaterhsed(NoiseTol,DmapDS)
 		}
 		showProgress(i/N);
 	}
-	run("Scale...", "x="+d2s(DmapDS,2)+" y="+d2s(DmapDS,2)+" z=1 width="+d2s(W,0)+" height="+d2s(H,0)+" depth="+d2s(D,0)+" interpolation=None process create title=WatershedLines");
+	run("Scale...", "x="+d2s(dmapds,2)+" y="+d2s(dmapds,2)+" z=1 width="+d2s(W,0)+" height="+d2s(H,0)+" depth="+d2s(D,0)+" interpolation=None process create title=WatershedLines");
 	selectImage("Dmap");
 	close();
 	selectImage("WatershedLinesDS");
