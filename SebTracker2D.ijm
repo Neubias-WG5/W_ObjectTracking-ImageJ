@@ -133,6 +133,7 @@ run("Select None");
 StartFrame = newArray(NObjs2+1);
 EndFrame = newArray(NObjs2+1);
 for(j=0;j<=NObjs2;j++)StartFrame[j] = -1;
+for(j=0;j<=NObjs2;j++)EndFrame[j] = nSlices;
 for(i=0;i<nSlices;i++)
 {
 	setSlice(i+1);
