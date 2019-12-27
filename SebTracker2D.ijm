@@ -133,7 +133,6 @@ run("Select None");
 StartFrame = newArray(NObjs2+1);
 EndFrame = newArray(NObjs2+1);
 for(j=0;j<=NObjs2;j++)StartFrame[j] = -1;
-for(j=0;j<=NObjs2;j++)EndFrame[j] = nSlices;
 for(i=0;i<nSlices;i++)
 {
 	setSlice(i+1);
@@ -143,7 +142,7 @@ for(i=0;i<nSlices;i++)
 		if(counts[j]>0)
 		{
 			if(StartFrame[j]==-1)StartFrame[j] = i;
-			else EndFrame[j] = i;
+			EndFrame[j] = i;
 		}
 	}
 }
