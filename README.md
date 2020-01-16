@@ -1,2 +1,2 @@
 # W_ObjectTracking-ImageJ
-An object tracking workflow using ImageJ
+Object tracking. For each time-frame, an image mask is obtained from median filtering (user defined radius), thresholding (user defined level) and hole filling. Convex objects are split apart by distance map watershed from regional intensity maxima (user defined noise tolerance), eroded (user defined radius) and analyzed as 3D particles (assuming some overlap between objects from a frame to the next frame). Finally, division events are analyzed and accounted for to relabel objects.
